@@ -17,11 +17,13 @@ def upload_packages():
     if file and helpers.allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(config.STORAGE_DIR, filename))
+        repo_browser.update_yum_repo()
         return "Ok"
     abort(404)
 
 def main():
-    app.run(debug=True)
+    repo_browser.init_yum_repo()
+    app.run(host="0.0.0.0", port="5000")
 
 if __name__ == "__main__":
     main()
